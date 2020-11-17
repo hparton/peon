@@ -43,7 +43,7 @@ const work = client => {
       })
     })
 
-    client.login('Nzc4Mjk2MTQ2ODI4NDYwMDc4.X7P6xQ.2GE0bWFde0R0fvvj_SYPbICNU6E')
+    client.login(process.env.CLIENT_TOKEN)
 
     addCommand('!help', 'me help', message => {
       message.author.send(_commands())
