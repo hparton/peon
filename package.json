@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@tensorflow/tfjs": "^2.7.0",
+    "apos-to-lex-form": "^1.0.5",
+    "discord.js": "^12.4.1",
+    "dotenv": "^8.2.0",
+    "ml-sentiment": "^2.0.7",
+    "natural": "^2.1.5",
+    "node-fetch": "^2.6.1",
+    "spelling-corrector": "^3.0.0",
+    "stopword": "^1.0.3"
+  }
+}
