@@ -13,7 +13,6 @@ const say = () => {
     'No time for play.',
     'Why you poking me again?',
     'Work is da poop! NO MORE!',
-    'Me no work no more!',
     'I am da powerful! Nobody tell me what to do!',
     'HEY! No more booterang! Me sorry! Me work!',
     'It put the mutton in the stomach!',
@@ -78,14 +77,14 @@ const work = client => {
       if (!command) return
 
       if (command.guildOnly && message.channel.type === 'dm') {
-        return message.reply("I can't execute that command inside DMs!")
+        return message.reply('Me only do that in public')
       }
 
       if (command.args && !args.length) {
-        let reply = `You didn't provide any arguments, ${message.author}!`
+        let reply = `You didn't tell me what to do, me no read minds, ${message.author}!`
 
         if (command.usage) {
-          reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``
+          reply += `\nMe expecting it to be: \`${prefix}${command.name} ${command.usage}\``
         }
 
         return message.channel.send(reply)
@@ -105,7 +104,7 @@ const work = client => {
         if (now < expirationTime) {
           const timeLeft = (expirationTime - now) / 1000
           return message.reply(
-            `please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`
+            `no! me wait ${timeLeft.toFixed(1)} second(s) before lstening to \`${command.name}\` again.`
           )
         }
       }
@@ -117,7 +116,7 @@ const work = client => {
         command.execute(message, args)
       } catch (error) {
         console.error(error)
-        message.reply('there was an error trying to execute that command!')
+        message.reply('Me no work no more!')
       }
     })
   }
