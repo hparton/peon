@@ -20,6 +20,7 @@ const say = () => {
     'It put the mutton in the stomach!',
     'OWWWW! Ok, ok, me go back to work!',
     'OOF! Booterang hurted me! Me tink work better den booterang!',
+    'I am the x3 Peon, the x3 bestest and smawtest bot in the x3 wowwd, bow befowe me!?',
   ]
 
   return quotes[Math.floor(Math.random() * quotes.length)]
