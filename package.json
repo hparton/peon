@@ -10,7 +10,8 @@
     "sequelize": "^6.3.5",
     "spelling-corrector": "^3.0.0",
     "sqlite3": "^5.0.0",
-    "stopword": "^1.0.3"
+    "stopword": "^1.0.3",
+    "uwuifier": "^2.0.2"
   },
   "scripts": {
     "start": "node bot.js"
