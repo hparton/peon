@@ -5,10 +5,6 @@ on:
     branches:
       - main
 
-env:
-  CLIENT_TOKEN: ${{ secrets.CLIENT_TOKEN }}
-  PREFIX: ${{ secrets.PREFIX }}
-
 jobs:
   deploy-google-cloud-run:
     runs-on: ubuntu-latest
@@ -44,4 +40,4 @@ jobs:
         run: gcloud builds submit --tag gcr.io/lazy-peon/lazy-peon
 
       - name: "GCP: Deploy lazy-peon"
-        run: gcloud run deploy --image gcr.io/lazy-peon/lazy-peon --platform managed --region europe-west2 lazy-peon
+        run: gcloud run deploy --image gcr.io/lazy-peon/lazy-peon --set-env-vars PREFIX=${{ secrets.PREFIX }} CLIENT_TOKEN=${{secrets.CLIENT_TOKEN}} --platform managed --region europe-west2 lazy-peon
