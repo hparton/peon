@@ -1,6 +1,6 @@
-const Uwuifier from 'uwuifier'
+const Uwuifier = require('uwuifier')
 
-const uwuifier = new Uwuifier();
+const uwuifier = new Uwuifier()
 
 module.exports = {
   name: 'test',
