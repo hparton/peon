@@ -7,7 +7,9 @@
     "ml-sentiment": "^2.0.7",
     "natural": "^2.1.5",
     "node-fetch": "^2.6.1",
+    "sequelize": "^6.3.5",
     "spelling-corrector": "^3.0.0",
+    "sqlite3": "^5.0.0",
     "stopword": "^1.0.3"
   }
 }

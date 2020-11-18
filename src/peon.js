@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const Discord = require('discord.js')
+const events_db = require('../db/events')
+const birthday_db = require('../db/birthdays')
 
 const say = () => {
   const quotes = [
@@ -38,6 +40,11 @@ const work = client => {
       console.log('           |___/             |___/ ')
       console.log('')
       console.log(say())
+
+      console.log('====================================')
+      console.log('Set up db, no time for fun')
+      events_db.Events.sync()
+      birthday_db.Birthdays.sync()
 
       client.user.setPresence({
         status: 'online',
@@ -135,11 +142,11 @@ const work = client => {
     listen,
     instructions,
     addCommand,
-    addListener,
+    addListener
   }
 }
 
 module.exports = {
   work,
-  say,
+  say
 }
