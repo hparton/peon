@@ -40,9 +40,9 @@ const work = client => {
       console.log('           |___/             |___/ ')
       console.log('')
       console.log(say())
-
       console.log('====================================')
-      console.log('Set up db, no time for fun')
+      console.log('')
+      console.log('Set up db, more work')
       events_db.Events.sync()
       birthday_db.Birthdays.sync()
 
@@ -142,11 +142,11 @@ const work = client => {
     listen,
     instructions,
     addCommand,
-    addListener
+    addListener,
   }
 }
 
 module.exports = {
   work,
-  say
+  say,
 }
