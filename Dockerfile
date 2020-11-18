@@ -6,8 +6,6 @@ COPY package.json /code/package.json
 
 RUN npm install
 
-RUN npm install -g pm2
-
 COPY . /code
 
-CMD [ "pm2", "start", "bot.js", "--name", "Lazy Peon"]
+CMD [ "node", "bot.js"]
