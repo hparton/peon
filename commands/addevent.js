@@ -13,6 +13,8 @@ module.exports = {
     description: 'Adding entry in db',
     execute(message) {
 
+        const data = []
+
         const input = message.content.slice(process.env.PREFIX.length).trim().split(/ +/);
         const command = input.shift().toLowerCase();
 
@@ -24,10 +26,12 @@ module.exports = {
             return message.channel.send(`You didn't provide any arguments, ${message.author}!`);
         }
 
-        message.channel.send(`Adding event for:`);
-        message.channel.send(`Event: ${tagEvent}`);
-        message.channel.send(`Date: ${tagDate}`);
-        message.channel.send(`Description: ${tagDescription}`);
+        data.push(`Adding event for:`);
+        data.push(`Event: ${tagEvent}`);
+        data.push(`Date: ${tagDate}`);
+        data.push(`Description: ${tagDescription}`);
+
+        message.channel.send(data, { split: true })
 
         try {
             // equivalent to: INSERT INTO tags (name, description, event, username) values (?, ?, ?);
