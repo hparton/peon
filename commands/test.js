@@ -1,4 +1,4 @@
-const Uwuifier = require('uwuifier')
+const Uwuifier = require('uwuifier').Uwuifier
 
 const uwuifier = new Uwuifier()
 
