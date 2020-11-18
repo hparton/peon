@@ -4,7 +4,7 @@ WORKDIR /bot
 
 COPY . /bot
 
-RUN npm ci
+RUN npm i
 
 # Listen on the specified port
 EXPOSE 5000
