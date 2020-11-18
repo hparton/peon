@@ -1,0 +1,47 @@
+name: Build and Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  CLIENT_TOKEN: ${{ secrets.CLIENT_TOKEN }}
+  PREFIX: ${{ secrets.PREFIX }}
+
+jobs:
+  deploy-google-cloud-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: "GCP: setup-gcloud"
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          export_default_credentials: true
+          project_id: lazy-peon
+          version: '285.0.0'
+
+          # Getting a key is kind of insane and involves generating a JSON file
+          # in the console, then base64 encoding it. See creating a a service account key here:
+          #
+          #     https://cloud.google.com/iam/docs/creating-managing-service-account-keys
+          #
+          # Then getting the string itself will involve something like:
+          #
+          #     cat my-key.json | base64
+          #
+          service_account_email: ${{ secrets.GCPEmail }}
+          service_account_key: ${{ secrets.GCPKey }}
+
+      - name: "GCP: gcloud info"
+        run: gcloud info
+
+      - name: "GCP: Publish image"
+        run: gcloud builds submit --tag gcr.io/lazy-peon/lazy-peon
+
+      - name: "GCP: Deploy lazy-peon"
+        run: gcloud run deploy --image gcr.io/lazy-peon/lazy-peon --platform managed --region europe-west2 lazy-peon
