@@ -26,7 +26,7 @@ const say = () => {
   return quotes[Math.floor(Math.random() * quotes.length)]
 }
 
-const work = client => {
+const work = (client, prefix = process.env.PREFIX) => {
   const cooldowns = new Discord.Collection()
 
   const wake = () => {
@@ -50,7 +50,7 @@ const work = client => {
       client.user.setPresence({
         status: 'online',
         activity: {
-          name: 'zug zug ~ !help',
+          name: `zug zug ~ ${prefix}help`,
           type: 'PLAYING',
         },
       })
@@ -72,7 +72,7 @@ const work = client => {
     }
   }
 
-  const listen = prefix => {
+  const listen = () => {
     addListener('message', message => {
       if (!message.content.startsWith(prefix) || message.author.bot) return
 
