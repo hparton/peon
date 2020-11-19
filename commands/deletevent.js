@@ -18,7 +18,7 @@ module.exports = {
       await Event.query().delete().where({
         name: name,
       })
-      return message.reply(`Event "${tagEvent}" deleted.`)
+      return message.reply(`Event "${name}" deleted.`)
     } catch (e) {
       console.log(e)
       return message.reply('Something went wrong with deleting the event.')
