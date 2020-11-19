@@ -28,9 +28,6 @@ module.exports = {
       return message.reply(`Event "${tagEvent}" deleted.`)
     } catch (e) {
       console.log(e)
-      if (e.name === 'SequelizeUniqueConstraintError') {
-        return message.reply('That event is already deleted.')
-      }
       return message.reply('Something went wrong with deleting the event.')
     }
   },

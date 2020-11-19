@@ -13,10 +13,9 @@ module.exports = {
 
     listEvents.forEach(function (arrayItem) {
         var event = arrayItem.name + arrayItem.date
-        console.log(event)
         data.push(`${event}\n`);
     })
 
-    message.channel.send(`Upcoming events: \n ${data}`);
+    message.channel.send(`Upcoming events: \n${data.join('')}`);
     }
 }
