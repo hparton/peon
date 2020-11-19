@@ -61,14 +61,3 @@ module.exports = {
     message.channel.send(data, { split: false })
   },
 }
-
-// check if a previous post exists
-// either delete and re-post or update the old post
-
-// 🗓️**Upcoming Guild Events Calendar**🗓️
-// **TODAY**
-// Bupkis
-
-// **NOVEMBER**
-// :zero::seven:  Mythic 0 Race :race_car:  More info here: https://discordapp.com/channels/638709141052850186/645273736898936832/767705994414260225
-// :two::four:  SHADOWLANDS BITCHES :skull:
