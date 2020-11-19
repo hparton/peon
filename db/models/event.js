@@ -19,19 +19,19 @@ class Event extends Model {
   // // used for input validation. Whenever a model instance is created
   // // either explicitly or implicitly it is checked against this schema.
   // // See http://json-schema.org/ for more info.
-  // static get jsonSchema() {
-  //   return {
-  //     type: 'object',
-  //     required: ['name', 'date', 'description', 'created_by'],
-  //     properties: {
-  //       id: { type: 'integer' },
-  //       name: { type: 'string', minLength: 1, maxLength: 255 },
-  //       date: { type: 'date', minLength: 1, maxLength: 255 },
-  //       description: { type: 'string', minLength: 1, maxLength: 255 },
-  //       created_by: { type: 'string' },
-  //     },
-  //   }
-  // }
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['name', 'date', 'description', 'created_by'],
+      properties: {
+        id: { type: 'integer' },
+        name: { type: 'string', minLength: 1, maxLength: 255 },
+        date: { type: 'datetime' },
+        description: { type: 'string', minLength: 1, maxLength: 255 },
+        created_by: { type: 'string' },
+      },
+    }
+  }
 }
 
 module.exports = Event

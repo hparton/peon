@@ -1,28 +1,30 @@
+const peon = require('../src/peon')
 const Event = require('../db/models/event')
+const chrono = require('chrono-node')
 
-const stringToDate = str => {
-  var date = str.split('-'),
-    m = date[0],
-    d = date[1],
-    y = date[2]
-  return new Date(y + '-' + m + '-' + d).toUTCString()
-}
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+
+dayjs.extend(utc)
 
 module.exports = {
   name: 'editevent',
+  args: true,
   description: 'Update entry in db',
   async execute(message) {
-    const input = message.content.slice(process.env.PREFIX.length).trim().split(/ +/)
-    const command = input.shift().toLowerCase()
+    const [name, date, description] = peon.parse(message.content).input
 
-    const tagEvent = input[0]
-    const tagDate = input[1]
-    const tagDescription = input[2]
+    if (!name || !date || !description) {
+      return message.channel.send(`You didn't provide any arguments, ${message.author}!`)
+    }
+
+    const parsedDate = chrono.parseDate(date, new Date(), { forwardDate: true })
 
     // equivalent to: UPDATE tags (description) values (?) WHERE name='?';
     const affectedRows = await Event.query()
       .patch({
-        date: tagDate,
+        name,
+        date: dayjs(parsedDate).utc(true).format('YYYY-MM-DD HH:mm:ss'),
         description: tagDescription,
       })
       .where({ name: tagEvent })

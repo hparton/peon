@@ -4,7 +4,7 @@ const Knex = require('knex')
 module.exports = {
   init() {
     console.log('')
-    console.log('Set up db, more work')
+    console.log('Setting up database...')
 
     // Initialize knex.
     const knex = Knex({
@@ -17,7 +17,5 @@ module.exports = {
 
     // Give the knex instance to objection.
     Model.knex(knex)
-
-    console.log('db setup')
   },
 }

@@ -118,7 +118,7 @@ const work = (client, prefix = process.env.PREFIX) => {
       setTimeout(() => timestamps.delete(message.author.id), cooldownAmount)
 
       try {
-        command.execute(message, args)
+        command.execute(message, args, client)
       } catch (error) {
         console.error(error)
         message.reply('Me no work no more!')
@@ -144,7 +144,37 @@ const work = (client, prefix = process.env.PREFIX) => {
   }
 }
 
+// prettier-ignore
+const partition = (array, isValid) => {
+  return array.reduce(([pass, fail], elem) => {
+    return isValid(elem) ? [[...pass, elem], fail] : [pass, [...fail, elem]];
+  }, [[], []]);
+}
+
+// prettier-ignore
+const parse = (content, prefix = process.env.PREFIX,seperator = ',') => {
+  let [_, ...raw] = content.slice(prefix.length).split(/ +/)
+  let [body, tags] = partition(raw, (item) => !item.startsWith('--'))
+
+
+  let input = body.join(' ').split(seperator).map(section => section.trim())
+  let args = tags.reduce((obj, arg) => {
+    let [rawKey, value] = arg.split('=')
+    let key = rawKey.replace('--', '')
+
+    obj[key] = value
+
+    return obj
+  }, {})
+
+  return {
+    input,
+    args
+  }
+}
+
 module.exports = {
   work,
+  parse,
   say,
 }
