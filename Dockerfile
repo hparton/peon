@@ -10,4 +10,4 @@ RUN npm i
 EXPOSE 5000
 
 # Set Node server
-ENTRYPOINT npm run start
+CMD ["npm", "start"]
