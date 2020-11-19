@@ -1,16 +1,14 @@
 {
   "dependencies": {
-    "@tensorflow/tfjs": "^2.7.0",
-    "apos-to-lex-form": "^1.0.5",
     "discord.js": "^12.4.1",
     "dotenv": "^8.2.0",
+    "knex": "^0.21.12",
     "ml-sentiment": "^2.0.7",
-    "natural": "^2.1.5",
+    "mysql": "^2.18.1",
     "node-fetch": "^2.6.1",
+    "objection": "^2.2.3",
     "sequelize": "^6.3.5",
-    "spelling-corrector": "^3.0.0",
-    "sqlite3": "^5.0.0",
-    "stopword": "^1.0.3"
+    "sqlite3": "^5.0.0"
   },
   "scripts": {
     "start": "node bot.js"

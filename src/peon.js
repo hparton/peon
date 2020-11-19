@@ -1,8 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const Discord = require('discord.js')
-const events_db = require('../db/events')
-const birthday_db = require('../db/birthdays')
+const DB = require('../db/init')
 
 const say = () => {
   const quotes = [
@@ -42,10 +41,8 @@ const work = (client, prefix = process.env.PREFIX) => {
       console.log('')
       console.log(say())
       console.log('====================================')
-      console.log('')
-      console.log('Set up db, more work')
-      events_db.Events.sync()
-      birthday_db.Birthdays.sync()
+
+      DB.init()
 
       client.user.setPresence({
         status: 'online',
