@@ -13,6 +13,7 @@
     "sqlite3": "^5.0.0"
   },
   "scripts": {
+    "deploy": "knex migrate:latest && node bot.js",
     "start": "node bot.js"
   }
 }
