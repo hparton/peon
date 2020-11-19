@@ -112,7 +112,7 @@ const work = (client, prefix = process.env.PREFIX) => {
         if (now < expirationTime) {
           const timeLeft = (expirationTime - now) / 1000
           return message.reply(
-            `no! me wait ${timeLeft.toFixed(1)} second(s) before lstening to \`${command.name}\` again.`
+            `no! me wait ${timeLeft.toFixed(1)} second(s) before listening to \`${command.name}\` again.`
           )
         }
       }
