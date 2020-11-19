@@ -1,46 +1,41 @@
+const peon = require('../src/peon')
 const Event = require('../db/models/event')
+const chrono = require('chrono-node')
 
-const stringToDate = str => {
-  var date = str.split('-'),
-    m = date[0],
-    d = date[1],
-    y = date[2]
-  return new Date(y + '-' + m + '-' + d).toUTCString()
-}
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+
+dayjs.extend(utc)
 
 module.exports = {
   name: 'addevent',
   description: 'Adding entry in db',
   async execute(message) {
     const data = []
+    const [name, date, description] = peon.parse(message.content).input
 
-    const input = message.content.slice(process.env.PREFIX.length).trim().split(/ +/)
-    const command = input.shift().toLowerCase()
-
-    const tagEvent = input[0]
-    const tagDate = input[1]
-    const tagDescription = input[2]
-
-    if (!input.length) {
+    if (!name || !date || !description) {
       return message.channel.send(`You didn't provide any arguments, ${message.author}!`)
     }
 
+    const parsedDate = chrono.parseDate(date, new Date(), { forwardDate: true })
+
     data.push(`Adding event for:`)
-    data.push(`Event: ${tagEvent}`)
-    data.push(`Date: ${tagDate}`)
-    data.push(`Description: ${tagDescription}`)
+    data.push(`Name: ${name}`)
+    data.push(`Date: ${parsedDate}`)
+    data.push(`Description: ${description}`)
 
     message.channel.send(data, { split: true })
 
     try {
       // equivalent to: INSERT INTO tags (name, description, event, username) values (?, ?, ?);
       await Event.query().insert({
-        name: tagEvent,
-        date: stringToDate(tagDate),
-        description: tagDescription,
+        name: name,
+        date: dayjs(parsedDate).utc(true).format('YYYY-MM-DD HH:mm:ss'),
+        description: description,
         created_by: message.author.username,
       })
-      return message.reply(`Event "${tagEvent}" added.`)
+      return message.reply(`Event "${name}" added.`)
     } catch (e) {
       console.log(e)
       if (e.name === 'SequelizeUniqueConstraintError') {
