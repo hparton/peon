@@ -70,8 +70,11 @@ const work = (client, prefix = process.env.PREFIX) => {
     }
   }
 
-  const schedule = (...args) => {
-    return nodeSchedule.scheduleJob(...args)
+  const schedule = (name, ...args) => {
+    client.on('ready', async () => {
+      console.log(`Starting scheduler for ${name} running every ${args[0]}`)
+      return nodeSchedule.scheduleJob(...args)
+    })
   }
 
   const listen = () => {

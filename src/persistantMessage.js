@@ -25,11 +25,15 @@ const find = async (client, key) => {
     return false
   }
 
-  return await client.channels.cache.get(persistantMessage.channel_id).messages.fetch(persistantMessage.message_id)
+  try {
+    return await client.channels.cache.get(persistantMessage.channel_id).messages.fetch(persistantMessage.message_id)
+  } catch (e) {
+    _clear(key)
+  }
 }
 
-const clear = async key => {
-  await Event.query().delete().where({
+const _clear = async key => {
+  await PersistantMessage.query().delete().where({
     key,
   })
 }
@@ -51,5 +55,4 @@ const _findOrCreate = async message_id => {
 module.exports = {
   create,
   find,
-  clear,
 }
