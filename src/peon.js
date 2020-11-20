@@ -70,6 +70,27 @@ const work = (client, prefix = process.env.PREFIX) => {
     }
   }
 
+  const scheduled = dir => {
+    const directory = path.resolve(require.main.path, dir)
+    const scheduleFiles = fs.readdirSync(directory).filter(file => file.endsWith('.js'))
+
+    for (const file of scheduleFiles) {
+      const command = require(`${directory}/${file}`)
+
+      schedule(command.name, command.format, () => {
+        console.log(`[Scheduled] Running ${command.name}`)
+        command.execute(client)
+      })
+
+      if (command.immediate) {
+        client.on('ready', async () => {
+          console.log(`[Immediate] Running ${command.name}`)
+          command.execute(client)
+        })
+      }
+    }
+  }
+
   const schedule = (name, ...args) => {
     client.on('ready', async () => {
       console.log(`Starting scheduler for ${name} running every ${args[0]}`)
@@ -148,6 +169,7 @@ const work = (client, prefix = process.env.PREFIX) => {
     schedule,
     listen,
     instructions,
+    scheduled,
     addCommand,
     addListener,
   }
