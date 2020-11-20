@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const Discord = require('discord.js')
 const DB = require('../db/init')
-const nodeSchedule = require('node-schedule')
 
 const say = () => {
   const quotes = [
@@ -68,10 +67,6 @@ const work = (client, prefix = process.env.PREFIX) => {
       // with the key as the command name and the value as the exported module
       client.commands.set(command.name, command)
     }
-  }
-
-  const schedule = (...args) => {
-    return nodeSchedule.scheduleJob(...args)
   }
 
   const listen = () => {
@@ -142,7 +137,6 @@ const work = (client, prefix = process.env.PREFIX) => {
   return {
     client,
     wake,
-    schedule,
     listen,
     instructions,
     addCommand,

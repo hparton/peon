@@ -17,7 +17,5 @@ module.exports = {
 
     // Give the knex instance to objection.
     Model.knex(knex)
-
-    console.log('Database setup.')
   },
 }
