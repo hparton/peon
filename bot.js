@@ -32,65 +32,65 @@ const convertDateToEmoji = date => {
 // Potential schedule format?
 //www.npmjs.com/package/node-schedule
 // run the related command every 5 minutes
-client.on('ready', async () => {
-  worker.schedule('*/5 * * * *', async () => {
-    console.log('Updating events post...')
+// client.on('ready', async () => {
+//   worker.schedule('*/5 * * * *', async () => {
+//     console.log('Updating events post...')
 
-    const infoChannel = client.channels.cache.find(
-      channel => channel.id === process.env.INFO_CHANNEL || '735769013489238026'
-    )
+//     const infoChannel = client.channels.cache.find(
+//       channel => channel.id === process.env.INFO_CHANNEL || '735769013489238026'
+//     )
 
-    const dateField = 'date'
-    const startOfTodayDate = dayjs.utc().subtract(1, 'day').endOf('day').toISOString()
-    const endOfTodayDate = dayjs.utc().endOf('day').toISOString()
-    const endOfMonthDate = dayjs.utc().endOf('month').toISOString()
+//     const dateField = 'date'
+//     const startOfTodayDate = dayjs.utc().subtract(1, 'day').endOf('day').toISOString()
+//     const endOfTodayDate = dayjs.utc().endOf('day').toISOString()
+//     const endOfMonthDate = dayjs.utc().endOf('month').toISOString()
 
-    const todaysEvents = await Event.query()
-      .where(dateField, '>=', startOfTodayDate)
-      .where(dateField, '<', endOfTodayDate)
-      .orderBy(dateField)
+//     const todaysEvents = await Event.query()
+//       .where(dateField, '>=', startOfTodayDate)
+//       .where(dateField, '<', endOfTodayDate)
+//       .orderBy(dateField)
 
-    const monthsEvents = await Event.query()
-      .whereBetween(dateField, [endOfTodayDate, endOfMonthDate])
-      .orderBy(dateField)
+//     const monthsEvents = await Event.query()
+//       .whereBetween(dateField, [endOfTodayDate, endOfMonthDate])
+//       .orderBy(dateField)
 
-    const data = []
+//     const data = []
 
-    data.push('🗓️ **Upcoming Guild Events Calendar** 🗓️')
+//     data.push('🗓️ **Upcoming Guild Events Calendar** 🗓️')
 
-    if (todaysEvents.length) {
-      data.push('')
-      data.push('**Today**')
-      todaysEvents.forEach(function (event) {
-        data.push(`**${event.name}** - ${event.description}`)
-      })
-    }
+//     if (todaysEvents.length) {
+//       data.push('')
+//       data.push('**Today**')
+//       todaysEvents.forEach(function (event) {
+//         data.push(`**${event.name}** - ${event.description}`)
+//       })
+//     }
 
-    if (monthsEvents.length) {
-      data.push('')
-      data.push(`**${dayjs().format('MMMM')}**`)
-      monthsEvents.forEach(function (event) {
-        data.push(`${convertDateToEmoji(dayjs.utc(event[dateField]))} **${event.name}** - ${event.description}`)
-      })
-    }
+//     if (monthsEvents.length) {
+//       data.push('')
+//       data.push(`**${dayjs().format('MMMM')}**`)
+//       monthsEvents.forEach(function (event) {
+//         data.push(`${convertDateToEmoji(dayjs.utc(event[dateField]))} **${event.name}** - ${event.description}`)
+//       })
+//     }
 
-    if (!todaysEvents.length && !monthsEvents.length) {
-      data.push('')
-      data.push('Nothing much.')
-    }
+//     if (!todaysEvents.length && !monthsEvents.length) {
+//       data.push('')
+//       data.push('Nothing much.')
+//     }
 
-    let existingMessage = await persist.find(client, 'info-test')
+//     let existingMessage = await persist.find(client, 'info-test')
 
-    if (existingMessage) {
-      existingMessage.edit(data)
-      return
-    }
+//     if (existingMessage) {
+//       existingMessage.edit(data)
+//       return
+//     }
 
-    persist.create('info-test', async () => {
-      return await infoChannel.send(data, { split: false })
-    })
-  })
-})
+//     persist.create('info-test', async () => {
+//       return await infoChannel.send(data, { split: false })
+//     })
+//   })
+// })
 
 // Listeners
 worker.addListener('message', sentiment)
