@@ -79,16 +79,12 @@ module.exports = {
 
     collector.on('collect', (reaction, user) => {
       votes[reaction.emoji.name]++
-
-      console.log(votes)
-      // throttledEdit(render(votes))
+      throttledEdit(render(votes))
     })
 
     collector.on('remove', (reaction, user) => {
       votes[reaction.emoji.name]--
-
-      console.log(votes)
-      // throttledEdit(render(votes))
+      throttledEdit(render(votes))
     })
 
     await Promise.all(
