@@ -1,10 +1,12 @@
 {
   "dependencies": {
     "chrono-node": "^2.1.9",
+    "common-tags": "^1.8.0",
     "dayjs": "^1.9.6",
     "discord.js": "^12.4.1",
     "dotenv": "^8.2.0",
     "knex": "^0.21.12",
+    "lodash.throttle": "^4.1.1",
     "ml-sentiment": "^2.0.7",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.1",
