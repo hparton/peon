@@ -14,7 +14,7 @@ const convertDateToEmoji = date => {
   }, '')
 }
 
-const upcoming = async () => {
+const upcoming = async (withIds = false) => {
   const dateField = 'date'
   const startOfTodayDate = dayjs.utc().subtract(1, 'day').endOf('day').toISOString()
   const endOfTodayDate = dayjs.utc().endOf('day').toISOString()
@@ -27,6 +27,19 @@ const upcoming = async () => {
 
   const monthsEvents = await Event.query().whereBetween(dateField, [endOfTodayDate, endOfMonthDate]).orderBy(dateField)
 
+  const formatEvent = (event, showDate = false) => {
+    return `${showDate ? convertDateToEmoji(dayjs.utc(event[dateField])) + ' ' : ''}${
+      !showDate ? '🕐' : ''
+    } **${dayjs.utc(event[dateField]).format('hA')}** - **${event.name}** - ${event.description}${
+      withIds ? ` | (${event.id})` : ''
+    }`
+  }
+
+  // Name stays
+  // add a type column
+  // use the id's to delete
+  // add parent_id if it's repeating.
+
   const data = []
 
   data.push('🗓️ **Upcoming Guild Events Calendar** 🗓️')
@@ -35,7 +48,7 @@ const upcoming = async () => {
     data.push('')
     data.push('**Today**')
     todaysEvents.forEach(function (event) {
-      data.push(`**${event.name}** - ${event.description}`)
+      data.push(formatEvent(event))
     })
   }
 
@@ -43,7 +56,7 @@ const upcoming = async () => {
     data.push('')
     data.push(`**${dayjs().format('MMMM')}**`)
     monthsEvents.forEach(function (event) {
-      data.push(`${convertDateToEmoji(dayjs.utc(event[dateField]))} **${event.name}** - ${event.description}`)
+      data.push(formatEvent(event, true))
     })
   }
 

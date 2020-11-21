@@ -5,7 +5,7 @@ module.exports = {
   name: 'events-calendar',
   immediate: true,
   description: 'Update the calendar command every 5 minutes.',
-  format: '*/5 * * * *',
+  frequency: '*/1 * * * *',
   execute: async client => {
     const infoChannel = await client.channels.cache.get(`${process.env.INFO_CHANNEL || '772847261196877826'}`)
     const data = await calendar.upcoming()

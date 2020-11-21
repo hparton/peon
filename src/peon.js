@@ -26,6 +26,11 @@ const say = () => {
   return quotes[Math.floor(Math.random() * quotes.length)]
 }
 
+const schedule = (client, name, ...args) => {
+  console.log(`Starting scheduler for ${name} running every ${args[0]}`)
+  return nodeSchedule.scheduleJob(...args)
+}
+
 const work = (client, prefix = process.env.PREFIX) => {
   const cooldowns = new Discord.Collection()
 
@@ -71,30 +76,23 @@ const work = (client, prefix = process.env.PREFIX) => {
   }
 
   const scheduled = dir => {
-    const directory = path.resolve(require.main.path, dir)
-    const scheduleFiles = fs.readdirSync(directory).filter(file => file.endsWith('.js'))
+    client.on('ready', async () => {
+      const directory = path.resolve(require.main.path, dir)
+      const scheduleFiles = fs.readdirSync(directory).filter(file => file.endsWith('.js'))
 
-    for (const file of scheduleFiles) {
-      const command = require(`${directory}/${file}`)
+      for (const file of scheduleFiles) {
+        const command = require(`${directory}/${file}`)
 
-      schedule(command.name, command.format, () => {
-        console.log(`[Scheduled] Running ${command.name}`)
-        command.execute(client)
-      })
-
-      if (command.immediate) {
-        client.on('ready', async () => {
-          console.log(`[Immediate] Running ${command.name}`)
+        schedule(client, command.name, command.frequency, () => {
+          console.log(`[Scheduled] Running ${command.name}`)
           command.execute(client)
         })
-      }
-    }
-  }
 
-  const schedule = (name, ...args) => {
-    client.on('ready', async () => {
-      console.log(`Starting scheduler for ${name} running every ${args[0]}`)
-      return nodeSchedule.scheduleJob(...args)
+        if (command.immediate) {
+          console.log(`[Immediate] Running ${command.name}`)
+          command.execute(client)
+        }
+      }
     })
   }
 
@@ -166,9 +164,9 @@ const work = (client, prefix = process.env.PREFIX) => {
   return {
     client,
     wake,
-    schedule,
     listen,
     instructions,
+    schedule,
     scheduled,
     addCommand,
     addListener,
@@ -208,4 +206,5 @@ module.exports = {
   work,
   parse,
   say,
+  schedule,
 }

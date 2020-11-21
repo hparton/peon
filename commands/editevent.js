@@ -12,7 +12,7 @@ module.exports = {
   args: true,
   description: 'Update entry in db',
   async execute(message) {
-    const [name, date, description] = peon.parse(message.content).input
+    const [id, name, date, description] = peon.parse(message.content).input
 
     if (!name || !date || !description) {
       return message.channel.send(`You didn't provide any arguments, ${message.author}!`)
@@ -25,12 +25,12 @@ module.exports = {
       .patch({
         name,
         date: dayjs(parsedDate).utc(true).format('YYYY-MM-DD HH:mm:ss'),
-        description: tagDescription,
+        description,
       })
-      .where({ name: tagEvent })
+      .where({ id })
     if (affectedRows > 0) {
-      return message.reply(`Event ${tagEvent} was updated.`)
+      return message.reply(`Event ${id} was updated.`)
     }
-    return message.reply(`Could not find an event with name ${tagEvent}.`)
+    return message.reply(`Could not find an event with name ${id}.`)
   },
 }
