@@ -27,13 +27,6 @@ module.exports = {
     const { input, args } = peon.parse(message.content)
     const [question, ...options] = input
 
-    const filter = (reaction, user) => {
-      return (
-        options.map((_, i) => alphabet[numberToLetter(i)]).includes(reaction.emoji.name) &&
-        user.id !== message.client.user.id
-      )
-    }
-
     const numberToLetter = v => (v + 10).toString(36)
     const votingBar = (value, total) => {
       const characters = scale(percentage(value, total), 0, 1, 0, 20)
@@ -72,7 +65,11 @@ module.exports = {
     }
 
     const poll = await message.channel.send(render(votes))
-
+    const filter = (reaction, user) => {
+      return (
+        options.map((_, i) => alphabet[numberToLetter(i)]).includes(reaction.emoji.name) && user.id !== poll.author.id
+      )
+    }
     const collector = poll.createReactionCollector(filter, { dispose: true })
 
     const throttledEdit = throttle(result => poll.edit(result), 1000)
