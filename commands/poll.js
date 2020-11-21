@@ -21,7 +21,7 @@ const alphabet = {
 }
 
 module.exports = {
-  name: '!poll',
+  name: 'poll',
   description: 'Make a poll',
   async execute(message) {
     const { input, args } = peon.parse(message.content)
@@ -79,12 +79,16 @@ module.exports = {
 
     collector.on('collect', (reaction, user) => {
       votes[reaction.emoji.name]++
-      throttledEdit(render(votes))
+
+      console.log(votes)
+      // throttledEdit(render(votes))
     })
 
     collector.on('remove', (reaction, user) => {
       votes[reaction.emoji.name]--
-      throttledEdit(render(votes))
+
+      console.log(votes)
+      // throttledEdit(render(votes))
     })
 
     await Promise.all(
