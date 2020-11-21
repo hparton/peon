@@ -3,6 +3,7 @@ const path = require('path')
 const Discord = require('discord.js')
 const DB = require('../db/init')
 const nodeSchedule = require('node-schedule')
+const ScheduledCommand = require('../db/models/scheduledCommand')
 
 const say = () => {
   const quotes = [
@@ -26,9 +27,27 @@ const say = () => {
   return quotes[Math.floor(Math.random() * quotes.length)]
 }
 
-const schedule = (client, name, ...args) => {
-  console.log(`Starting scheduler for ${name} running every ${args[0]}`)
-  return nodeSchedule.scheduleJob(...args)
+const schedule = async (client, frequency, name, args) => {
+  const scheduledCommand = await ScheduledCommand.query().insert({
+    frequency,
+    name,
+    args,
+  })
+
+  runSchedule(client, frequency, name, args, scheduledCommand)
+}
+
+const runSchedule = (client, frequency, name, args, scheduledCommand) => {
+  console.log(`Starting scheduler for ${scheduledCommand.id} - ${name} running ${frequency}`)
+
+  const directory = path.resolve(require.main.path, './scheduled')
+  const command = require(`${directory}/${name}`)
+  const execute = (when, job) => {
+    console.log(`[${when}] Running ${name} - ${scheduledCommand.id}`)
+    command.execute(client, args, scheduledCommand, job)
+  }
+
+  const job = nodeSchedule.scheduleJob(frequency, () => execute('Scheduled', job))
 }
 
 const work = (client, prefix = process.env.PREFIX) => {
@@ -77,22 +96,10 @@ const work = (client, prefix = process.env.PREFIX) => {
 
   const scheduled = dir => {
     client.on('ready', async () => {
-      const directory = path.resolve(require.main.path, dir)
-      const scheduleFiles = fs.readdirSync(directory).filter(file => file.endsWith('.js'))
-
-      for (const file of scheduleFiles) {
-        const command = require(`${directory}/${file}`)
-
-        schedule(client, command.name, command.frequency, () => {
-          console.log(`[Scheduled] Running ${command.name}`)
-          command.execute(client)
-        })
-
-        if (command.immediate) {
-          console.log(`[Immediate] Running ${command.name}`)
-          command.execute(client)
-        }
-      }
+      const scheduledCommands = await ScheduledCommand.query()
+      scheduledCommands.forEach(scheduledCommand =>
+        runSchedule(client, scheduledCommand.frequency, scheduledCommand.name, scheduledCommand.args, scheduledCommand)
+      )
     })
   }
 
@@ -166,7 +173,6 @@ const work = (client, prefix = process.env.PREFIX) => {
     wake,
     listen,
     instructions,
-    schedule,
     scheduled,
     addCommand,
     addListener,

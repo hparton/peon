@@ -10,7 +10,7 @@ const worker = peon.work(client, process.env.PREFIX)
 
 worker.wake()
 worker.instructions('./commands')
-worker.scheduled('./scheduled')
+worker.scheduled()
 worker.listen()
 
 // Listeners

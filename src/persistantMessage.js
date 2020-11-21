@@ -26,8 +26,11 @@ const find = async (client, key) => {
   }
 
   try {
-    return await client.channels.cache.get(persistantMessage.channel_id).messages.fetch(persistantMessage.message_id)
+    const channel = await client.channels.fetch(persistantMessage.channel_id)
+    const message = await channel.messages.fetch(persistantMessage.message_id)
+    return message
   } catch (e) {
+    console.warn(e)
     _clear(key)
   }
 }
@@ -55,4 +58,5 @@ const _findOrCreate = async message_id => {
 module.exports = {
   create,
   find,
+  clear: _clear,
 }
