@@ -85,13 +85,17 @@ const work = (client, prefix = process.env.PREFIX) => {
     const directory = path.resolve(require.main.path, dir)
     const commandFiles = fs.readdirSync(directory).filter(file => file.endsWith('.js'))
 
-    for (const file of commandFiles) {
-      const command = require(`${directory}/${file}`)
+    client.on('ready', () => {
+      for (const file of commandFiles) {
+        const command = require(`${directory}/${file}`)
 
-      // set a new item in the Collection
-      // with the key as the command name and the value as the exported module
-      client.commands.set(command.name, command)
-    }
+        // set a new item in the Collection
+        // with the key as the command name and the value as the exported module
+        client.commands.set(command.name, command)
+
+        command.setup && command.setup(client)
+      }
+    })
   }
 
   const scheduled = dir => {
