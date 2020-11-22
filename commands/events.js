@@ -5,7 +5,8 @@ const persist = require('../src/persistantMessage')
 
 module.exports = {
   name: 'events',
-  description: 'Find all entries in db',
+  usage: '<--ids> <--live>',
+  description: 'Get all the upcoming events for the month.',
   async execute(message) {
     const { args } = peon.parse(message.content)
     const id = uuid.v4()

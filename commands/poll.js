@@ -7,6 +7,11 @@ const { stripIndents } = require('common-tags')
 
 const percentage = (partialValue, total) => partialValue / total
 const scale = (value, x1, y1, x2, y2) => ((value - x1) * (y2 - x2)) / (y1 - x1) + x2
+const numberToLetter = v => (v + 10).toString(36)
+const votingBar = (value, total) => {
+  const characters = scale(percentage(value, total), 0, 1, 0, 20)
+  return '█'.repeat(characters)
+}
 
 const alphabet = {
   a: '🇦',
@@ -22,17 +27,19 @@ const alphabet = {
 
 module.exports = {
   name: 'poll',
+  args: true,
+  usage: '<your description here>, <option 1>, <option 2>, <option 3>, ...',
   description: 'Make a poll',
   async execute(message) {
     const { input, args } = peon.parse(message.content)
     const [question, ...options] = input
-
-    const numberToLetter = v => (v + 10).toString(36)
-    const votingBar = (value, total) => {
-      const characters = scale(percentage(value, total), 0, 1, 0, 20)
-      return '█'.repeat(characters)
-    }
     const optionsMappedToEmoji = options.map((option, i) => `:regional_indicator_${numberToLetter(i)}: **${option}**`)
+
+    const filter = (reaction, user) => {
+      return (
+        options.map((_, i) => alphabet[numberToLetter(i)]).includes(reaction.emoji.name) && user.id !== poll.author.id
+      )
+    }
 
     const votes = options.reduce((obj, option, i) => {
       obj[alphabet[numberToLetter(i)]] = 0
@@ -65,29 +72,25 @@ module.exports = {
     }
 
     const poll = await message.channel.send(render(votes))
-    const filter = (reaction, user) => {
-      return (
-        options.map((_, i) => alphabet[numberToLetter(i)]).includes(reaction.emoji.name) && user.id !== poll.author.id
-      )
-    }
     const collector = poll.createReactionCollector(filter, { dispose: true })
-
     const throttledEdit = throttle(result => poll.edit(result), 1000)
 
     collector.on('collect', async (reaction, user) => {
       if (reaction.partial) {
-        console.log()
+        console.log('[Partial] Got a partial reaction, resolving before continuing.')
         await reaction.fetch()
       }
+
       votes[reaction.emoji.name]++
       throttledEdit(render(votes))
     })
 
     collector.on('remove', async (reaction, user) => {
       if (reaction.partial) {
-        console.log()
+        console.log('[Partial] Got a partial reaction, resolving before continuing.')
         await reaction.fetch()
       }
+
       votes[reaction.emoji.name]--
       throttledEdit(render(votes))
     })
@@ -99,16 +102,3 @@ module.exports = {
     )
   },
 }
-
-// █
-
-// format
-// What days do you guys think we should raid?
-
-// :regional_indicator_a: **Monday**  |  :regional_indicator_b:  **Tuesday**  |  :regional_indicator_c: **Wednesday** |  :regional_indicator_d:  **Thursday**
-
-// :regional_indicator_a:  ███████████████████
-// :regional_indicator_b:  ███████████
-// :regional_indicator_c:  ██████
-// :regional_indicator_d:  ███████████████
-// _use a reaction below to vote, voting closes in 24 hours_

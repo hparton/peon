@@ -4,8 +4,8 @@ const Event = require('../db/models/event')
 module.exports = {
   name: 'deletevent',
   args: true,
-  usage: '!deleteevent <id>',
-  description: 'Deleting entry in db',
+  usage: '<id>',
+  description: 'Remove an event from the calendar',
   async execute(message) {
     const data = []
     const [id] = peon.parse(message.content).input

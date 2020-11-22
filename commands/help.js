@@ -2,7 +2,7 @@ module.exports = {
   name: 'help',
   description: 'me help',
   aliases: ['commands'],
-  usage: '[command name]',
+  usage: '<command name>',
   cooldown: 5,
   execute(message, args) {
     const data = []
@@ -12,7 +12,7 @@ module.exports = {
     if (!args.length) {
       data.push('Something need doing?')
       data.push(commands.map(command => command.name).join(', '))
-      data.push(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`)
+      data.push(`\nYou can send \`${prefix}help <command name>\` to get info on a specific command!`)
 
       return message.author.send(data, { split: true }).catch(error => {
         console.error(`Could not send help DM to ${message.author.tag}.\n`, error)

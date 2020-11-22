@@ -10,7 +10,8 @@ dayjs.extend(utc)
 module.exports = {
   name: 'editevent',
   args: true,
-  description: 'Update entry in db',
+  usage: '<id>, <name>, <time>, <description>',
+  description: 'Edit an existing event',
   async execute(message) {
     const [id, name, date, description] = peon.parse(message.content).input
 
