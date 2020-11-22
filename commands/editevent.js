@@ -29,9 +29,11 @@ module.exports = {
         description,
       })
       .where({ id })
+
     if (affectedRows > 0) {
       return message.reply(`Event ${id} was updated.`)
     }
+
     return message.reply(`Could not find an event with name ${id}.`)
   },
 }

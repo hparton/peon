@@ -5,6 +5,16 @@ const { stripIndents } = require('common-tags')
 // const question = ['What days do you guys think we should raid?']
 // const options = ['Monday', 'Tuesday', 'Wednesday', 'Thursday']
 
+// maybe try this with a db table of poll messages that expire after a defined time.
+// check if reaction.message.id matches so rebooting the bot won't break reactions.
+// client.on('messageReactionAdd', (reaction, user) => {
+//   console.log(`${user.username} reacted with ${reaction.emoji.name}`)
+// })
+//       if (reaction.partial) {
+//     console.log()
+//     await reaction.fetch()
+//   }
+
 const percentage = (partialValue, total) => partialValue / total
 const scale = (value, x1, y1, x2, y2) => ((value - x1) * (y2 - x2)) / (y1 - x1) + x2
 const numberToLetter = v => (v + 10).toString(36)

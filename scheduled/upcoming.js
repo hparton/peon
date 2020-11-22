@@ -13,13 +13,13 @@ module.exports = {
     if (existingMessage) {
       existingMessage.edit(data)
       return
-    } else {
-      console.log(`Can't find the message, stopping job: ${scheduledCommand.id}`)
-      await ScheduledCommand.query().deleteById(scheduledCommand.id)
+    }
 
-      if (job) {
-        job.cancel()
-      }
+    console.log(`Can't find the message, stopping job: ${scheduledCommand.id}`)
+    await ScheduledCommand.query().deleteById(scheduledCommand.id)
+
+    if (job) {
+      job.cancel()
     }
   },
 }
