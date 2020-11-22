@@ -25,7 +25,7 @@ module.exports = {
     data.push(`Date: ${parsedDate}`)
     data.push(`Description: ${description}`)
 
-    message.channel.send(data, { split: true })
+    message.channel.send(data, { split: false })
 
     try {
       // equivalent to: INSERT INTO tags (name, description, event, username) values (?, ?, ?);

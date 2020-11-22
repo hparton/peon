@@ -104,7 +104,7 @@ const work = (client, prefix = process.env.PREFIX) => {
   }
 
   const listen = () => {
-    addListener('message', message => {
+    addListener('message', async message => {
       if (!message.content.startsWith(prefix) || message.author.bot) return
 
       const args = message.content.slice(prefix.length).trim().split(/ +/)
@@ -114,6 +114,10 @@ const work = (client, prefix = process.env.PREFIX) => {
         client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))
 
       if (!command) return
+
+      if (message.partial) {
+        await message.fetch()
+      }
 
       if (command.guildOnly && message.channel.type === 'dm') {
         return message.reply('Me only do that in public')
