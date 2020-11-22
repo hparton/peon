@@ -4,7 +4,7 @@ const Discord = require('discord.js')
 const peon = require('./src/peon')
 const sentiment = require('./listeners/sentiment')
 
-const client = new Discord.Client()
+const client = new Discord.Client({ partials: ['REACTION'] })
 
 const worker = peon.work(client, process.env.PREFIX)
 

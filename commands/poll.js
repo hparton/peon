@@ -74,12 +74,14 @@ module.exports = {
 
     const throttledEdit = throttle(result => poll.edit(result), 1000)
 
-    collector.on('collect', (reaction, user) => {
+    collector.on('collect', async (reaction, user) => {
+      if (reaction.partial) await reaction.fetch()
       votes[reaction.emoji.name]++
       throttledEdit(render(votes))
     })
 
-    collector.on('remove', (reaction, user) => {
+    collector.on('remove', async (reaction, user) => {
+      if (reaction.partial) await reaction.fetch()
       votes[reaction.emoji.name]--
       throttledEdit(render(votes))
     })
