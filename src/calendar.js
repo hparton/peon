@@ -68,7 +68,63 @@ const upcoming = async (withIds = false) => {
   return data
 }
 
+const birthdays = async (month, user) => {
+  const dateField = 'date'
+  const startOfTodayDate = dayjs.utc().subtract(1, 'day').endOf('day').toISOString()
+  const endOfTodayDate = dayjs.utc().endOf('day').toISOString()
+
+  const nameField = 'name'
+  const nameData = '%birthday%'
+  const data = []
+
+  if (!month && !user) {
+    const birthdaysToday = await Event.query()
+    .where(nameField, 'LIKE', nameData)
+    .where(dateField, '>=', startOfTodayDate)
+    .where(dateField, '<', endOfTodayDate)
+    .orderBy(dateField)
+
+    birthdaysToday.forEach(function (event) {
+      var person = event.name.split('birthday')
+      data.push(`Today **${person}** has his/her birthday, Congratulations **${person}**!`)
+    })
+  }
+
+  if (month) {
+    const monthToSearch = new Date();
+    monthToSearch.setMonth(month);
+    const newMonth = monthToSearch.getMonth();
+    const newYear = monthToSearch.getFullYear();
+    const startOfMonth = new Date(newYear, newMonth, 1).toISOString();
+    const endOfMonth = new Date(newYear, newMonth + 1, 0).toISOString();
+
+    const birthdaysInMonth = await Event.query()
+    .where(nameField, 'LIKE', nameData)
+    .whereBetween(dateField, [startOfMonth, endOfMonth])
+    .orderBy(dateField)
+
+    birthdaysInMonth.forEach(function (event) {
+      var person = event.name.split('birthday')
+      data.push(`**${person}** has a birthday on ${event.date}`)
+    })
+  }
+
+  if (user) {
+    const usersBirthday = await Event.query()
+    .where(nameField, 'LIKE', `%${user}%`)
+    .orderBy(nameField)
+
+    usersBirthday.forEach(function (event) {
+      var person = event.name.split('birthday')
+      data.push(`**${person}** has a birthday on ${event.date}`)
+    })
+  }
+
+  return data
+}
+
 module.exports = {
   upcoming,
+  birthdays,
   convertDateToEmoji,
 }
